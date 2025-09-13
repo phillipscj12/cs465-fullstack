@@ -1,0 +1,28 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/css/site.css"/>
+  </head>
+  <body>
+    {{> header}}
+    <main>
+      <section class="hero">
+        <h1>{{hero.headline}}</h1>
+        <p>{{hero.sub}}</p>
+      </section>
+
+      <section class="features">
+        {{#each features}}
+          <div class="feature">
+            <span class="ico">{{this.icon}}</span>
+            <p>{{this.text}}</p>
+          </div>
+        {{/each}}
+      </section>
+    </main>
+    {{> footer}}
+    <script>document.querySelector("footer span").innerText = "© " + new Date().getFullYear() + " Travlr Getaways";</script>
+  </body>
+</html>
