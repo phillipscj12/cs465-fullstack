@@ -1,0 +1,20 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/css/site.css"/>
+  </head>
+  <body>
+    {{> header}}
+    <main>
+      <h1>{{trip.title}}</h1>
+      <img src="{{trip.image}}" alt="{{trip.title}}" style="max-width:480px; width:100%;"/>
+      <p>{{trip.summary}}</p>
+      <p><strong>{{trip.nights}}</strong> nights — ${{trip.price}}</p>
+      <p>Trip code: <code>{{trip.code}}</code></p>
+      <p><a href="/trips">Back to trips</a></p>
+    </main>
+    {{> footer}}
+  </body>
+</html>
