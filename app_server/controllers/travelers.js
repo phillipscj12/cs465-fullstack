@@ -1,13 +1,13 @@
-﻿/**
- * Controller functions render Handlebars views with data.
- * Replace mock data with real data later (Mongo/REST).
- */
-const tripsData = [
-  { code: "C01", title: "City Break",  price: 499, nights: 3, summary: "Weekend downtown",  image: "/img/beach.jpg" },
-  { code: "B02", title: "Beach Escape", price: 899, nights: 5, summary: "Relax on the coast", image: "/img/city.jpg" },
-  { code: "M03", title: "Mountain Run", price: 799, nights: 4, summary: "Trails and views",   image: "/img/mountain.jpg" },
-];
+﻿const path = require("path");
+const fs = require("fs");
 
+// read trips.json each request (simple for Module 3; later we’d cache or DB)
+function readTrips() {
+  const p = path.join(__dirname, "..", "..", "data", "trips.json");
+  const raw = fs.readFileSync(p, "utf8");
+  const clean = raw.replace(/^\uFEFF/, ""); // strip BOM if present
+  return JSON.parse(clean);
+}
 const index = (req, res) => {
   res.render("index", {
     title: "Travlr Getaways",
@@ -15,22 +15,29 @@ const index = (req, res) => {
     features: [
       { icon: "🗺️", text: "Curated itineraries" },
       { icon: "🛫", text: "Flexible departures" },
-      { icon: "💬", text: "Real support" },
-    ],
+      { icon: "💬", text: "Real support" }
+    ]
   });
 };
 
-const trips = (req, res) => {
-  res.render("trips", {
-    title: "Trips",
-    trips: tripsData,
-  });
+const trips = (req, res, next) => {
+  try {
+    const trips = readTrips();
+    res.render("trips", { title: "Trips", trips });
+  } catch (e) {
+    next(e);
+  }
 };
 
-const tripByCode = (req, res) => {
-  const trip = tripsData.find(t => t.code === req.params.code);
-  if (!trip) return res.status(404).render("error", { title: "Not Found", message: "Trip not found." });
-  res.render("trip-details", { title: trip.title, trip });
+const tripByCode = (req, res, next) => {
+  try {
+    const trips = readTrips();
+    const trip = trips.find(t => t.code === req.params.code);
+    if (!trip) return res.status(404).render("error", { title: "Not Found", message: "Trip not found." });
+    res.render("trip-details", { title: trip.title, trip });
+  } catch (e) {
+    next(e);
+  }
 };
 
 module.exports = { index, trips, tripByCode };
