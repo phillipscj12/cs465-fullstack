@@ -1,35 +1,21 @@
 {
-<<<<<<< HEAD
   "name": "module2-travlr",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
+  "description": "CS-465 Module 2 – Travlr site (MVC + HBS)",
+  "main": "app.js",
   "scripts": {
-    "dev":"nodemon app.js","start":"node app.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "seed": "node ./scripts/seed.js",
+  "dev": "nodemon app.js",
+  "start": "node app.js"
+},
   "dependencies": {
-    "express": "^5.1.0",
-    "hbs": "^4.2.0"
+    "dotenv": "^17.2.2",
+    "express": "^4.19.2",
+    "hbs": "^4.2.0",
+    "mongoose": "^8.18.2"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
-=======
-  "name": "travlr",
-  "version": "0.0.0",
-  "private": true,
-  "scripts": {
-    "start": "node ./bin/www"
-  },
-  "dependencies": {
-    "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
-    "express": "~4.16.1",
-    "hbs": "~4.0.4",
-    "http-errors": "~1.6.3",
-    "morgan": "~1.9.1"
->>>>>>> origin/main
   }
 }

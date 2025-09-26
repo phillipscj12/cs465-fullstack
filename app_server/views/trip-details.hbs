@@ -11,7 +11,7 @@
       <h1>{{trip.title}}</h1>
       <img src="{{trip.image}}" alt="{{trip.title}}" style="max-width:480px; width:100%;"/>
       <p>{{trip.summary}}</p>
-      <p><strong>{{trip.nights}}</strong> nights — ${{trip.price}}</p>
+      <p><strong>{{plural trip.nights "night"}}</strong> — {{currency trip.price}}</p>
       <p>Trip code: <code>{{trip.code}}</code></p>
       <p><a href="/trips">Back to trips</a></p>
     </main>

@@ -1,73 +1,43 @@
-<<<<<<< HEAD
-﻿const path = require("path");
-const express = require("express");
-const hbs = require("hbs");
+require('dotenv').config();
+const path = require('path');
+const express = require('express');
+const hbs = require('hbs');
+
+// connect to MongoDB (loads MONGODB_URI from .env)
+require('./app_server/models/db');
 
 const app = express();
 
-/** View engine: Handlebars **/
-app.set("views", path.join(__dirname, "app_server", "views"));
-app.set("view engine", "hbs");
-hbs.registerPartials(path.join(__dirname, "app_server", "views", "partials"));
+/** View engine: Handlebars (HBS) **/
+app.set('views', path.join(__dirname, 'app_server', 'views'));
+app.set('view engine', 'hbs');
+hbs.registerPartials(path.join(__dirname, 'app_server', 'views', 'partials'));
+hbs.registerHelper('year', function () { return new Date().getFullYear(); });
+hbs.registerHelper('currency', function (v) { return '$' + Number(v).toFixed(2); });
+hbs.registerHelper('plural', function (n, s) {
+  n = Number(n);
+  return n + ' ' + (n === 1 ? s : s + 's');
+});
 
-/** Static files **/
-app.use(express.static(path.join(__dirname, "public")));
+/** Static + body parsing **/
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 /** Routes **/
-const travelersRouter = require("./app_server/routes/travelers");
-app.use("/", travelersRouter);
+app.use('/', require('./app_server/routes/travelers'));
+app.use('/api', require('./app_server/routes/api'));
 
-/** 404 + error **/
-app.use((req, res) => res.status(404).render("error", { title: "Not Found", message: "Page not found." }));
-app.use((err, req, res, next) => {
+/** 404 + error handlers **/
+app.use(function (req, res) {
+  res.status(404).render('error', { title: 'Not Found', message: 'Page not found.' });
+});
+app.use(function (err, req, res, next) {
   console.error(err);
-  res.status(500).render("error", { title: "Server Error", message: "Something went wrong." });
+  res.status(500).render('error', { title: 'Server Error', message: 'Something went wrong.' });
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Travlr site listening on http://localhost:${PORT}`));
-=======
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
-var app = express();
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs');
-
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+app.listen(PORT, function () {
+  console.log('Travlr site listening on http://localhost:' + PORT);
 });
-
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
-
-module.exports = app;
->>>>>>> origin/main
