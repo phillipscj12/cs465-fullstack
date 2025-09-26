@@ -1,13 +1,5 @@
-﻿const path = require("path");
-const fs = require("fs");
+﻿const Trip = require("../models/Trip");
 
-// read trips.json each request (simple for Module 3; later we’d cache or DB)
-function readTrips() {
-  const p = path.join(__dirname, "..", "..", "data", "trips.json");
-  const raw = fs.readFileSync(p, "utf8");
-  const clean = raw.replace(/^\uFEFF/, ""); // strip BOM if present
-  return JSON.parse(clean);
-}
 const index = (req, res) => {
   res.render("index", {
     title: "Travlr Getaways",
@@ -20,24 +12,19 @@ const index = (req, res) => {
   });
 };
 
-const trips = (req, res, next) => {
+const trips = async (req, res, next) => {
   try {
-    const trips = readTrips();
+    const trips = await Trip.find().sort({ createdAt: -1 }).lean();
     res.render("trips", { title: "Trips", trips });
-  } catch (e) {
-    next(e);
-  }
+  } catch (e) { next(e); }
 };
 
-const tripByCode = (req, res, next) => {
+const tripByCode = async (req, res, next) => {
   try {
-    const trips = readTrips();
-    const trip = trips.find(t => t.code === req.params.code);
+    const trip = await Trip.findOne({ code: req.params.code.toUpperCase() }).lean();
     if (!trip) return res.status(404).render("error", { title: "Not Found", message: "Trip not found." });
     res.render("trip-details", { title: trip.title, trip });
-  } catch (e) {
-    next(e);
-  }
+  } catch (e) { next(e); }
 };
 
 module.exports = { index, trips, tripByCode };
