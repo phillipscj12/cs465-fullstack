@@ -1,10 +1,12 @@
 require('dotenv').config();
+require('./app_api/models/db');
+
 const path = require('path');
 const express = require('express');
 const hbs = require('hbs');
 
 // connect to MongoDB (loads MONGODB_URI from .env)
-require('./app_server/models/db');
+
 
 const app = express();
 
