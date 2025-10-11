@@ -3,12 +3,14 @@ require('./app_api/models/db');
 
 const path = require('path');
 const express = require('express');
+const cors = require('cors');
 const hbs = require('hbs');
 
 // connect to MongoDB (loads MONGODB_URI from .env)
 
 
 const app = express();
+app.use(cors());
 
 /** View engine: Handlebars (HBS) **/
 app.set('views', path.join(__dirname, 'app_server', 'views'));
@@ -43,3 +45,8 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, function () {
   console.log('Travlr site listening on http://localhost:' + PORT);
 });
+
+
+
+
+
