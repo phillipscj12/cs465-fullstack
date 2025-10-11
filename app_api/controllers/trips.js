@@ -1,19 +1,44 @@
-﻿const Trip = require("../models/Trip");
+﻿// add below existing list/byCode
+const Trip = require("../../app_server/models/Trip");
 
-/** GET /api/trips */
-exports.list = async (req, res, next) => {
+exports.create = async (req, res, next) => {
   try {
-    const trips = await Trip.find().sort({ createdAt: -1 }).lean();
-    res.status(200).json(trips);
+    const t = await Trip.create({
+      code: String(req.body.code).toUpperCase(),
+      title: req.body.title,
+      summary: req.body.summary,
+      price: Number(req.body.price),
+      nights: Number(req.body.nights),
+      image: req.body.image
+    });
+    res.status(201).json(t);
   } catch (e) { next(e); }
 };
 
-/** GET /api/trips/:code */
-exports.byCode = async (req, res, next) => {
+exports.update = async (req, res, next) => {
   try {
-    const code = String(req.params.code || "").toUpperCase();
-    const trip = await Trip.findOne({ code }).lean();
-    if (!trip) return res.status(404).json({ error: "Not found" });
-    res.status(200).json(trip);
+    const code = String(req.params.code).toUpperCase();
+    const t = await Trip.findOneAndUpdate(
+      { code },
+      {
+        title: req.body.title,
+        summary: req.body.summary,
+        price: Number(req.body.price),
+        nights: Number(req.body.nights),
+        image: req.body.image
+      },
+      { new: true, runValidators: true }
+    ).lean();
+    if (!t) return res.status(404).json({ error: "Not found" });
+    res.json(t);
+  } catch (e) { next(e); }
+};
+
+exports.remove = async (req, res, next) => {
+  try {
+    const code = String(req.params.code).toUpperCase();
+    const out = await Trip.findOneAndDelete({ code }).lean();
+    if (!out) return res.status(404).json({ error: "Not found" });
+    res.status(204).end();
   } catch (e) { next(e); }
 };
