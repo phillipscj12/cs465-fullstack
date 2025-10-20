@@ -4,19 +4,22 @@
   "private": true,
   "description": "CS-465 Module 2 – Travlr site (MVC + HBS)",
   "main": "app.js",
-  "scripts": {
+  "scripts":{"seed:admin":"node ./scripts/seed-admin.js",
     "seed": "node ./scripts/seed.js",
     "dev": "nodemon app.js",
     "start": "node app.js"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^4.19.2",
     "hbs": "^4.2.0",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.18.2"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
   }
 }
+
