@@ -1,13 +1,13 @@
-﻿const Trip = require("../models/Trip");
+const Trip = require("../../app_api/models/Trip");
 
 const index = (req, res) => {
   res.render("index", {
     title: "Travlr Getaways",
     hero: { headline: "Plan your next trip", sub: "Fast, simple, and flexible." },
     features: [
-      { icon: "🗺️", text: "Curated itineraries" },
-      { icon: "🛫", text: "Flexible departures" },
-      { icon: "💬", text: "Real support" }
+      { icon: "???", text: "Curated itineraries" },
+      { icon: "??", text: "Flexible departures" },
+      { icon: "??", text: "Real support" }
     ]
   });
 };
@@ -28,3 +28,4 @@ const tripByCode = async (req, res, next) => {
 };
 
 module.exports = { index, trips, tripByCode };
+
